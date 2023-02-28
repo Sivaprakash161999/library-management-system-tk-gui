@@ -651,7 +651,127 @@ class main:
         obj.edbooks()
 
     def returnbook(self):
-        pass
+        class retu(main):
+            def __init__(self):
+
+                self.frame = Frame(root, bd=0, relief='flat', bg='#ffe8ec', width=900, height=390)
+                self.frame.place(x=0, y=110)
+
+                self.f1 = Frame(self.frame, bg='#ffe8ec', width=500, height=200, bd=5, relief='flat')
+                self.f1.place(x=200, y=15)
+
+                self.ed = Frame(self.f1, bg='#581854', bd=0, relief='flat', width=130, height=35)
+                self.ed.place(x=170, y=0)
+
+                self.lac = Label(self.ed, text='RETURN BOOKS', bg='#581854', fg='#fff', font=('Calibri', 12, 'bold'))
+                self.lac.place(x=10, y=5)
+
+                #ERP ID
+                self.label8 = Label(self.f1, text='ERP ID', bg='#ffe8ec', fg='black', font=('Times New Roman', 11, 'bold'))
+                self.label8.place(x=85, y=65)
+
+                self.entry4 = Entry(self.f1, width=30, bd=4, relief='groove', font=('Calibri', 8, 'bold'))
+                self.entry4.place(x=188, y=65)
+
+                #Return Button
+                self.button9 = Button(self.f1, text='RETURN', bg='#581845', fg='#fff', width=8, height=0,
+                                font=('Calibri', 12, 'bold'), command=self.retbook, activebackground="#000", activeforeground="#581845")
+                self.button9.place(x=85, y=120)
+
+                #Back Button (clickable image)
+                self.backbt = Button(self.frame, width=60, bg='#ffe8ec', bd=0, relief='flat', command=self.cur, activebackground='#ffe8ec')
+                self.backbt.place(x=0, y=0)
+                self.log = PhotoImage(file='backbtn1.png')
+                self.backbt.config(image=self.log, compound=LEFT)
+                self.small_log = self.log.subsample(2, 2)
+                self.backbt.config(image=self.small_log)
+
+            def retsucc(self):
+                self.entry4.delete(0, END)
+                cursor1 = dbstudents.cursor()
+                cursor1.execute("UPDATE Students SET FromDate='', ToDate='', Charge='" + str(self.charge) + "' WHERE ERP='" + self.entry + "'")
+                dbstudents.commit()
+                messagebox.showinfo("Success", "Charges Updated and Books Returned Successfully")
+                self.tom.destroy()
+
+            def retbook(self):
+                self.charge = 0
+                self.entry = self.entry4.get()
+
+                cursor = dbstudents.cursor()
+                cursor.execute("SELECT * FROM Students WHERE ERP='" + self.entry + "'")
+                dbstudents.commit()
+
+                self.data = cursor.fetchone()
+                if self.data != None:
+                    if int(self.data[11]) >= 1:
+                        self.get_date = date.today()
+                        cursor = dbstudents.cursor()
+
+                        cursor.execute("UPDATE Students SET NoBook = 0, SubmitDate='" + str(self.get_date) + "' WHERE ERP='" + self.entry + "'")
+                        dbstudents.commit()
+
+                        cursor = dbstore.cursor()
+                        cursor.execute("UPDATE Books SET Issue='', ID='" + self.entry + "'")
+                        dbstore.commit()
+
+                        cursor = dbstudents.cursor()
+                        cursor.execute("SELECT * FROM Students WHERE ERP='" + self.entry + "'")
+                        dbstudents.commit()
+                        self.var = cursor.fetchone()
+                        if self.var != None:
+                            self.a = self.var[8]
+                            self.b = self.var[9]
+                            formatStr = '%Y-%m-%d'
+                            delta1 = datetime.strptime(self.a, formatStr)
+                            delta2 = datetime.strptime(self.b, formatStr)
+                            delta = delta2-delta1
+                            chm = delta.days
+
+                            if chm <= 0:
+                                messagebox.showinfo("Success", "Books returned successfully")
+                                self.entry4.delete(0, END)
+
+                            else:
+                                self.tom = Tk()
+                                self.tom.geometry("300x150+300+258")
+                                self.tom.iconbitmap("aa.ico")
+                                self.tom.title("Library System")
+                                self.tom.resizable(0, 0)
+                                self.tom.configure(bg="#ffe8ec")
+
+                                self.lb = Label(self.tom, text="Name of Student: ", bg="#ffe8ec", fg="black", font=('Calibri', 11, 'bold'))
+                                self.lb.place(x=5, y=20)
+                                self.lb2 = Label(self.tom, text=self.var[1], bg="#ffe8ec", fg="black", font=('Calibri', 11, 'bold'))
+                                self.lb2.place(x=130, y=20)
+
+                                self.charge = (5*chm) + int(self.var[10])
+                                self.lb3 = Label(self.tom, text="Fine Chare: ", bg="#ffe8ec", fg='black', font=('Calibri', 11, 'bold'))
+                                self.lb3.place(x=5, y=55)
+
+                                self.lc2 = Label(self.tom, text=self.charge, bg='#ffe8ec', fg='black', font=('Calibri', 11, 'bold'))
+                                self.lc2.place(x=155, y=55)
+                                self.lc3 = Label(self.tom, text='Rs. ', bg='#ffe8ec', fg='black', font=('Calibri', 11, 'bold'))
+                                self.lc3.place(x=130, y=55)
+
+                                self.tombtn = Button(self.tom, text='SUBMIT', background='#581845', foreground='white', font=('Calibri', 12, 'bold'), width=8,
+                                                    activebackground='black', activeforeground='#581845', relief='flat', command=self.retsucc)
+                                self.tombtn.place(x=5, y=90)
+
+                                self.tom.mainloop()
+
+                            cursor1 = dbstudents.cursor()
+                            cursor1.execute("UPDATE Students SET FromDate='', ToDate='', Charge='" + str(self.charge) + "' WHERE ERP='" + self.entry + "'")
+                            dbstudents.commit()
+
+                    else:
+                        messagebox.showwarning("No Books Found", "This student does not have any book issued!")
+                        self.entry4.delete(0, END)
+                else:
+                    messagebox.showerror("Invalid ERP ID", "This student doesn't exist!")
+                    self.entry4.delete(0, END)
+        object = retu()
+
 
     def delete(self):
         class dele(main):
@@ -709,17 +829,142 @@ class main:
         occ = dele()
         occ.deletebooks()
 
-
-
-
     def show(self):
-        pass
+        class test(main):
+            def __init__(self):
 
-    def show(self):
-        pass
+                self.fc = Frame(root, bg='#ffe8ec', width=900, height=390)
+                self.fc.place(x=0, y=110)
+                self.popframe = Frame(self.fc, width=180, height=30, bg='#edb40d')
+                self.popframe.place(x=360, y=0)
+                self.lbn = Label(self.popframe, bg='#edb40d', text='BOOKS INFORMATION', fg='#fff', font=('Calibri', 12, 'bold'))
+                self.lbn.place(x=8, y=4)
+
+                #Back Button (clickable image)
+                self.backbt = Button(self.fc, width=30, bg='#ffe8ec', bd=0, relief='flat', command=self.cur, activeforeground='black', activebackground='#ffe8ec')
+                self.backbt.place(x=0, y=0)
+                self.log = PhotoImage(file='backbtn1.png')
+                self.backbt.config(image=self.log, compound=LEFT)
+                self.small_log = self.log.subsample(3, 3)
+                self.backbt.config(image=self.small_log)
+
+                self.table_frame = Frame(self.fc, bg='#ffe8ec', bd=1, relief='flat')
+                self.table_frame.place(x=0, y=30, width=900, height=360)
+
+                self.scroll_x = Scrollbar(self.table_frame, orient=HORIZONTAL)
+                self.scroll_y = Scrollbar(self.table_frame, orient=VERTICAL)
+                self.book_table = ttk.Treeview(self.table_frame, columns=("Book ID", "Title", "Author", "Edition", "Price"),
+                                    xscrollcommand=self.scroll_x.set, yscrollcommand=self.scroll_y.set)
+
+
+                self.scroll_x.pack(side=BOTTOM, fill=X)
+                self.scroll_y.pack(side=RIGHT, fill=Y)
+                self.scroll_x.config(command=self.book_table.xview)
+                self.scroll_y.config(command=self.book_table.yview)
+
+                self.book_table.heading("Book ID", text="Book ID")
+                self.book_table.heading("Title", text="Title")
+                self.book_table.heading("Author", text="Author")
+                self.book_table.heading("Edition", text="Edition")
+                self.book_table.heading("Price", text="Price")
+                self.book_table['show'] = 'headings'
+                self.book_table.column("Book ID", width=200)
+                self.book_table.column("Title", width=200)
+                self.book_table.column("Author", width=200)
+                self.book_table.column("Edition", width=200)
+                self.book_table.column("Price", width=200)
+                self.book_table.pack(fill=BOTH, expand=1)
+                self.fetch_data()
+
+            def fetch_data(self):
+                cursor = dbstore.cursor()
+                cursor.execute("SELECT * FROM Books")
+                self.rows=cursor.fetchall()
+                if len(self.rows) != 0:
+                    for self.row in self.rows:
+                        self.book_table.insert("", END, values=self.row)
+                dbstore.commit()
+        oc=test()
 
     def search(self):
-        pass
+        class demt(main):
+            def delmdata(self):
+
+                self.fc = Frame(root, bg='#ffe8ec', width=900, height=390)
+                self.fc.place(x=0, y=110)
+
+                self.fc1 = Frame(self.fc, bg='#ffe8ec', width=500, height=200, bd=5, relief='flat')
+                self.fc1.place(x=200, y=15)
+
+                self.edm = Frame(self.fc1, bg='#b76e79', bd=0, relief='flat', width=130, height=35)
+                self.edm.place(x=140, y=0)
+
+                self.lac = Label(self.edm, text='SEARCH BOOKS', bg='#b76e79', fg='#fff', font=('Calibri', 12, 'bold'))
+                self.lac.place(x=8, y=5)
+
+                #Book ID
+                self.label8 = Label(self.fc1, text='Book ID', bg='#ffe8ec', fg='black', font=('Times New Roman', 11, 'bold'))
+                self.label8.place(x=85, y=65)
+                self.entryl = Entry(self.fc1, width=30, bd=4, relief='groove', font=('Calibri', 8, 'bold'))
+                self.entryl.place(x=188, y=65)
+
+                #Search Button
+                self.butto = Button(self.fc1, text='SEARCH', bg='#b76e79', fg='#fff', width=8,
+                                font=('Calibri', 12, 'bold'), command=self.srch, relief='flat', activebackground='black', activeforeground='#b76e79')
+                self.butto.place(x=85, y=120)
+
+                #Back Button (clickable image)
+                self.backbt = Button(self.fc, width=60, bg='#ffe8ec', bd=0, relief='flat', command=self.cur, activeforeground='black', activebackground='#ffe8ec')
+                self.backbt.place(x=0, y=0)
+                self.log = PhotoImage(file='backbtn1.png')
+                self.backbt.config(image=self.log, compound=LEFT)
+                self.small_log = self.log.subsample(2, 2)
+                self.backbt.config(image=self.small_log)
+
+            def srch(self):
+                self.emp = self.entryl.get()
+
+                cursor = dbstore.cursor()
+                cursor.execute("SELECT * FROM Books WHERE BookID='" + self.emp + "'")
+                dbstore.commit()
+                self.srval = cursor.fetchone()
+
+                if self.srval != None:
+                    self.top = Tk()
+                    self.top.title("Library System")
+                    self.top.iconbitmap("aa.ico")
+                    self.top.geometry("400x200+335+250")
+                    self.top.resizable(0, 0)
+                    self.top.configure(bg='#ffe8ec')
+
+                    self.frm = Frame(self.top, bg='#b76e79', width=100, height=35)
+                    self.frm.place(x=100, y=10)
+
+                    self.mnlb = Label(self.frm, bg='#b76e79', fg='#fff', text="AVAILABLE", font=('Calibri', 12, 'bold'))
+                    self.mnlb.place(x=9, y=5)
+
+                    self.lb1 = Label(self.top, text='Title: ', bg='#ffe8ec', fg='black', font=('Calibri', 12, 'bold'))
+                    self.lb1.place(x=85, y=70)
+                    self.lb2 = Label(self.top, text=self.srval[1], bg='#ffe8ec', fg='black', font=('Calibri', 12, 'bold'))
+                    self.lb2.place(x=165, y=70)
+
+                    self.lb3 = Label(self.top, text='Author: ', bg='#ffe8ec', fg='black', font=('Calibri', 12, 'bold'))
+                    self.lb3.place(x=85, y=110)
+                    self.lb4 = Label(self.top, text=self.srval[2], bg='#ffe8ec', fg='black', font=('Calibri', 12, 'bold'))
+                    self.lb4.place(x=165, y=110)
+
+                    self.lb5 = Label(self.top, text='Edition: ', bg='#ffe8ec', fg='black', font=('Calibri', 12, 'bold'))
+                    self.lb5.place(x=85, y=150)
+                    self.lb6 = Label(self.top, text=self.srval[3], bg='#ffe8ec', fg='black', font=('Calibri', 12, 'bold'))
+                    self.lb6.place(x=165, y=150)
+
+                    self.entryl.delete(0, END)
+
+                else:
+                    messagebox.showwarning('Invalid Data', 'This book does not exists!')
+                    self.entryl.delete(0, END)
+        object = demt()
+        object.delmdata()
 
     def login(self):
         self.var1 = self.e1.get()
