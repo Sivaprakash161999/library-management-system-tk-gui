@@ -10,3 +10,4 @@ perform the following operations:
 4. Issue Book
 5. Return Book
 6. Show Book
+7. Add Student

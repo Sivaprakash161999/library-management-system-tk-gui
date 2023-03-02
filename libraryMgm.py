@@ -72,7 +72,7 @@ class main:
         self.develop = Label(self.fm3, text='Developed By - Sivaprakash', bg='#fff', fg='#d7837f',
                                         font=('Candara', 12, 'bold'))
 
-        self.develop.place(x=700, y=350)
+        self.develop.place(x=680, y=350)
 
         #AddButton
         self.bt1 = Button(self.fm3, text='  Add Books', fg='#fff', bg='#581854', font=('Candara', 15, 'bold'), width=170,
@@ -144,24 +144,131 @@ class main:
         self.small_log7 = self.log7.subsample(1,1)
         self.bt7.config(image=self.small_log7)
 
-        #ExitButton
-        try:
-            self.bt8 = Button(self.fm3, text='  Log Out', fg='#fff', bg='#581854', font=('Candara', 15, 'bold'), width=170,
-                                height=0, bd=7, relief='flat', command=self.code, cursor='hand2',
-                                activebackground='black', activeforeground='#581845')
-            self.bt8.place(x=250, y=280)
-            self.log8 = PhotoImage(file='assets/bt8.png')
-            self.bt8.config(image=self.log8, compound=LEFT)
-            self.small_log8 = self.log8.subsample(1,1)
-            self.bt8.config(image=self.small_log8)
-        except:
-            self.bt9 = ttk.Button(self.fm3, text='Name', bg='#a40000', font=('Candara', 15, 'bold'), width=150,
-                                height=0)
-            self.bt9.place(x=40, y=350)
-            self.log9 = PhotoImage(file='assets/bt8.png')
-            self.bt9.config(image=self.log9, compound=LEFT)
-            self.small_log9 = self.log9.subsample(1,1)
-            self.bt9.config(image=self.small_log9)
+        #Add Student
+        self.bt9 = Button(self.fm3, text='  Add Students', fg='#fff', bg='#581854', font=('Candara', 15, 'bold'), width=170,
+                            height=0, bd=7, relief='flat', command=self.addstudent, cursor='hand2',
+                            activebackground='black', activeforeground='#581845')
+        self.bt9.place(x=250, y=280)
+        self.log9 = PhotoImage(file='assets/bt9.png')
+        self.bt9.config(image=self.log9, compound=LEFT)
+        self.small_log9 = self.log9.subsample(8,8)
+        self.bt9.config(image=self.small_log9)
+
+
+    def addstudent(self):
+        class temp(main):
+            def student(self):
+                self.fm = Frame(root, bg='#ffe8ec', width=900, height=390)
+                self.fm.place(x=0, y=110)
+
+                self.fm1 = Frame(self.fm, bg='#ffe8ec', width=500, height=360, bd=5, relief='flat')
+                self.fm1.place(x=200, y=15)
+
+                #Back Button (clickable image)
+                self.backbt = Button(self.fm, width=60, bg='#ffe8ec', bd=0, relief='flat', command=self.cur, activeforeground='black', activebackground='#ffe8ec')
+                self.backbt.place(x=2, y=7)
+                self.log = PhotoImage(file='assets/backbtn1.png')
+                self.backbt.config(image=self.log, compound=LEFT)
+                self.small_log = self.log.subsample(2, 2)
+                self.backbt.config(image=self.small_log)
+
+                self.fll = Frame(self.fm1, width=150, height=40, bg='#ff6690')
+                self.fll.place(x=150, y=15)
+                self.ll = Label(self.fll, text='ADD STUDENTS', fg='#fff', bg='#ff6690', font=('Canara', 12, 'bold'), width=15)
+                self.ll.place(x=0, y=8)
+
+                #ERP
+                self.lb = Label(self.fm1, text='ERP', fg='black', bg='#ffe8ec', font=('times new roman', 11, 'bold'))
+                self.lb.place(x=70, y=80)
+
+                #Name
+                self.lb2 = Label(self.fm1, text='Name', fg='black', bg='#ffe8ec', font=('times new roman', 11, 'bold'))
+                self.lb2.place(x=70, y=110)
+
+                #Course
+                self.lb3 = Label(self.fm1, text='Course', fg='black', bg='#ffe8ec', font=('times new roman', 11, 'bold'))
+                self.lb3.place(x=70, y=140)
+
+                #Year
+                self.lb4 = Label(self.fm1, text='Year', fg='black', bg='#ffe8ec', font=('times new roman', 11, 'bold'))
+                self.lb4.place(x=70, y=170)
+
+                #RollNo
+                self.lb5 = Label(self.fm1, text='RollNo', fg='black', bg='#ffe8ec', font=('times new roman', 11, 'bold'))
+                self.lb5.place(x=70, y=200)
+
+                #Email
+                self.lb6 = Label(self.fm1, text='Email', fg='black', bg='#ffe8ec', font=('times new roman', 11, 'bold'))
+                self.lb6.place(x=70, y=230)
+
+                #ContactNo
+                self.lb7 = Label(self.fm1, text='Contact No.', fg='black', bg='#ffe8ec', font=('times new roman', 11, 'bold'))
+                self.lb7.place(x=70, y=260)
+
+                #Entries
+                self.ee1 = Entry(self.fm1, width=25, bd=2.5, relief='groove', font=('Calibri', 10, 'bold'))
+                self.ee1.place(x=180, y=80)
+
+                self.ee2 = Entry(self.fm1, width=25, bd=2.5, relief='groove', font=('Calibri', 10, 'bold'))
+                self.ee2.place(x=180, y=110)
+
+                self.ee3 = Entry(self.fm1, width=25, bd=2.5, relief='groove', font=('Calibri', 10, 'bold'))
+                self.ee3.place(x=180, y=140)
+
+                self.ee4 = Entry(self.fm1, width=25, bd=2.5, relief='groove', font=('Calibri', 10, 'bold'))
+                self.ee4.place(x=180, y=170)
+
+                self.ee5 = Entry(self.fm1, width=25, bd=2.5, relief='groove', font=('Calibri', 10, 'bold'))
+                self.ee5.place(x=180, y=200)
+
+                self.ee6 = Entry(self.fm1, width=25, bd=2.5, relief='groove', font=('Calibri', 10, 'bold'))
+                self.ee6.place(x=180, y=230)
+
+                self.ee7 = Entry(self.fm1, width=25, bd=2.5, relief='groove', font=('Calibri', 10, 'bold'))
+                self.ee7.place(x=180, y=260)
+
+                #Submit Button
+                self.bt = Button(self.fm1, text='SUBMIT', width=8, fg='white', bg='#ff6690', font=('Canara', 12, 'bold'), bd=3,
+                                relief='flat', command=self.submit1, activebackground='black', activeforeground='#ff6690')
+                self.bt.place(x=70, y=300)
+
+            #Submit Button fucntion
+            def submit1(self):
+                try:
+                    self.erp = self.ee1.get()
+                    self.name = self.ee2.get()
+                    self.course = self.ee3.get()
+                    self.year = self.ee4.get()
+                    self.rollno = self.ee5.get()
+                    self.email = self.ee6.get()
+                    self.contactno = self.ee7.get()
+
+                    if (self.erp and self.name and self.course and self.year and self.rollno and self.email and self.contactno):
+                        cursor = dbstudents.cursor()
+                        cursor.execute("INSERT INTO Students(ERP, Name, Course, Year, RollNo, Email, ContactNo) values(?,?,?,?,?,?,?)", (self.erp,
+                                                                                                                    self.name, self.course, self.year, self.rollno, self.email, self.contactno))
+                        dbstudents.commit()
+                        messagebox.showinfo("Success", "Student has been added to the library successfully")
+
+                        #clear the entries after successful operation
+                        self.clear()
+                    else:
+                        messagebox.showerror("Error", "Enter Valid Details")
+                except Exception as e:
+                    messagebox.showerror("Error", "Enter Valid Details")
+
+            def clear(self):
+                self.ee1.delete(0, END)
+                self.ee2.delete(0, END)
+                self.ee3.delete(0, END)
+                self.ee4.delete(0, END)
+                self.ee5.delete(0, END)
+                self.ee6.delete(0, END)
+                self.ee7.delete(0, END)
+
+        #create object to invoke funtion
+        obj = temp()
+        obj.student()
 
     def addbook(self):
         class temp(main):
@@ -989,6 +1096,36 @@ class main:
 
             self.lb3 = Label(self.fm2, text='DASHBOARD', fg='White', bg='#012727', font=('times new roman', 30, 'bold'))
             self.lb3.place(x=325, y=17)
+
+            #ExitButton
+            # try:
+            self.bt8 = Button(self.fm2, text=' Log Out', fg='#fff', bg='#012727', font=('Candara', 15, 'bold'), width=100,
+                                height=0, bd=3, relief='flat', command=self.code, cursor='hand2',
+                                activebackground='#012727', activeforeground='black')
+            self.bt8.place(x=770, y=17)
+            self.log8 = PhotoImage(file='assets/bt8.png')
+            self.bt8.config(image=self.log8, compound=LEFT)
+            self.small_log8 = self.log8.subsample(1, 1)
+            self.bt8.config(image=self.small_log8)
+
+                # #LogOut Clickable Label
+                # self.logout = Label(self.fm2, text='Log Out', fg='White', bg='#012727', activeforeground='black',
+                #             font=('cursive', 11, 'bold'))
+                # self.logout.place(x=815, y=30)
+                # self.logout.bind("<Button>", self.code)
+            # except:
+            #     self.bt10 = ttk.Button(self.fm3, text='Name', bg='#012727', font=('Candara', 15, 'bold'), width=100,
+            #                         height=0)
+            #     self.bt10.place(x=770, y=17)
+            #     self.log10 = PhotoImage(file='assets/bt8.png')
+            #     self.bt10.config(image=self.log10, compound=LEFT)
+            #     self.small_log10 = self.log10.subsample(1,1)
+            #     self.bt10.config(image=self.small_log10)
+                #LogOut Clickable Label
+                # self.logout = Label(self.fm2, text='Log Out', fg='White', bg='#012727', activeforeground='black',
+                #             font=('cursive', 11, 'bold'))
+                # self.logout.place(x=815, y=30)
+                # self.logout.bind("<Button>", self.code)
 
             #Name of the logged in admin
             self.name = Label(root, text="Name : ", bg='#fff', fg="black", font=("Calibri", 12, 'bold'))
